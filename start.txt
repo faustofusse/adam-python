@@ -12,3 +12,4 @@ http://docs.deeppavlov.ai/en/master/features/models/squad.html?highlight=pretrai
 
 OTHERS:
 conda remove --name adam --all
+pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org <package>
