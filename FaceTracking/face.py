@@ -27,6 +27,7 @@ time.sleep(2.0)
 while True:
 	# read the next frame from the video stream and resize it
 	frame = vs.read()
+	frame = cv2.flip(frame, 1)
 	frame = imutils.resize(frame, width=400)
 	# if the frame dimensions are None, grab them
 	if W is None or H is None:
@@ -68,8 +69,8 @@ while True:
 
 	(rects, weights) = hog.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=1.05)
 
-	for (x, y, w, h) in rects:
-		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
+	# for (x, y, w, h) in rects:
+		# cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 0, 255), 2)
 
 	rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
 
@@ -79,7 +80,7 @@ while True:
 		cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
     # show the output frame
-	cv2.imshow("Frame", frame)
+	cv2.imshow("Adam", frame)
 	key = cv2.waitKey(1) & 0xFF
 	# if the `q` key was pressed, break from the loop
 	if key == ord("q"):

@@ -1,0 +1,6 @@
+https://codeforgeek.com/building-live-webcam-face-detector-node-js-opencv/
+http://www.codershood.info/2018/07/11/detect-faces-in-images-using-nodejs/
+https://www.youtube.com/watch?v=qexy4Ph66JE
+https://www.pyimagesearch.com/2015/11/09/pedestrian-detection-opencv/
+
+python object_tracker.py --prototxt deploy.prototxt \--model res10_300x300_ssd_iter_140000.caffemodel
