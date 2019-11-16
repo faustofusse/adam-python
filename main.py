@@ -1,37 +1,49 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 from flask_socketio import SocketIO, send, emit
-from camera import FaceDetectionCamera
+from face_detection.camera import PersonalizedCamera
+from cv2 import cv2
 
 app = Flask(__name__)
 socketio = SocketIO(app)
+face_detection = PersonalizedCamera(socketio)
 
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/holis', methods=['POST'])
-def post():
-    socketio.emit('values', {'hola': 3232})
-    return 'Holaaaaa'
-
-def gen(camera):
-    while True:
-        frame = camera.get_frame()
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
-
 
 @app.route('/video_feed')
 def video_feed():
-    # socketio.emit('values', {'hola': 3232})
-    return Response(gen(FaceDetectionCamera(socketio)),
+    return Response(face_detection.feed(),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
-@socketio.on('holaa')
+@app.route('/users')
+def get_users():
+    return {'success': face_detection.names}
+
+
+@app.route('/users/train', methods=['POST'])
+def train():
+    data = request.get_json()
+    name = data['name']
+    count = data['count']
+    face_detection.train(name, count)
+    return {'success': 'Training user: ' + name}
+
+
+@app.route('/users/<name>', methods=['DELETE'])
+def delete_person(name):
+    if (len(face_detection.names) <= 2):
+        return {'error': 'There must be at least two users.'}
+    face_detection.delete_person(name)
+    return {'success': name + ' deleted!'}
+
+
+@socketio.on('mensaje')
 def handle_message(message):
-    print('received message (hola): ' + str(message))
+    print('Received message (hola): ' + str(message))
 
 
 if __name__ == '__main__':
