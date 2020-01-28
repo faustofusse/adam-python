@@ -2,7 +2,7 @@
 
 Getting started:
 
-conda create --name adam
+conda create --name adam\n
 conda activate adam
 conda install python=3.6.9
 pip install deeppavlov
